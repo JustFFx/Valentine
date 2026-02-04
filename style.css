@@ -1,0 +1,162 @@
+:root {
+    --heart-color: #ff4d6d;
+    --bg-color: #fff0f3;
+    --compliment-color: #e01313;
+}
+
+body {
+    height: 100dvh;
+    width: 100%;
+    background-color: var(--bg-color);
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Pacifico', cursive;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    /* Флексбокс — спасение для iOS */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* Исправленная титулка */
+.title {
+    text-align: center; /* Текст внутри блока по центру */
+    color: var(--heart-color);
+    margin-bottom: 50px; /* Отступ от текста до сердца */
+    user-select: none;
+}
+
+.title h1 {
+    margin: 10px 0; /* Убираем лишние отступы между строками */
+    font-size: 2.5rem;
+}
+
+/* Контейнер сердца */
+.heart-container {
+    display: block;
+    justify-self: center;
+    margin-top: 200px;
+    width: 200px;
+    height: 200px;
+    cursor: pointer;
+    animation: bounce 2s infinite ease-in-out;
+}
+
+/* Сама фигура */
+.heart {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background-color: var(--heart-color);
+    transform: rotate(-45deg);
+    box-shadow: -10px 10px 40px rgba(255, 77, 109, 0.4);
+}
+
+/* Левое ушко */
+.heart::before {
+    content: "";
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background-color: var(--heart-color);
+    border-radius: 50%;
+    top: -100px;
+    left: 0;
+}
+
+/* Правое ушко */
+.heart::after {
+    content: "";
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background-color: var(--heart-color);
+    border-radius: 50%;
+    left: 100px;
+    top: 0;
+}
+
+/* Анимации */
+@keyframes bounce {
+    0%, 100% { transform: scale(1) translateY(0); }
+    50% { transform: scale(1.1) translateY(0); }
+}
+
+.clicked {
+    animation: pulse 0.4s ease-out !important;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+.compliment {
+    position: absolute;
+    color: var(--compliment-color);
+    font-size: 1.5rem;
+    pointer-events: none;
+    z-index: 10;
+    white-space: nowrap;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    /* Общее время анимации 3 секунды */
+    animation: fallDown 3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+}
+
+@keyframes fallDown {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5);
+    }
+    /* Взлет до 15% (примерно 0.45 сек) */
+    15% {
+        opacity: 1;
+        transform: translate(calc(-50% + var(--arc-x)), calc(-50% + var(--arc-y))) scale(1.1);
+    }
+    /* Пауза длится до 32% (еще +0.5 сек) */
+    32% {
+        opacity: 1;
+        transform: translate(calc(-50% + var(--arc-x)), calc(-50% + var(--arc-y))) scale(1.1);
+    }
+    /* Финальное падение вниз */
+    100% {
+        opacity: 0;
+        transform: translate(calc(-50% + var(--dx)), 150vh) rotate(var(--rot)) scale(0.7);
+    }
+}
+
+/* --- Адаптив для мобильных устройств --- */
+
+@media (max-width: 480px) {
+    .compliment {
+        font-size: 1.2rem; /* Оптимальный размер для чтения */
+        font-weight: bold; /* Чтобы текст был четче */
+        text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8); /* Легкий контур для читаемости */
+    }
+
+    .title h1 {
+        font-size: 1.6rem;
+    }
+
+    .heart-container {
+        transform: scale(0.7);
+    }
+
+
+    /* Корректируем анимацию пульсации для уменьшенного сердца */
+    @keyframes bounce {
+        0%, 100% { transform: scale(0.7) translateY(0); }
+        50% { transform: scale(0.6) translateY(0); }
+    }
+
+    /* Чтобы слова не растягивали экран по ширине */
+    .compliment {
+        font-size: 1.1rem;
+    }
+}
